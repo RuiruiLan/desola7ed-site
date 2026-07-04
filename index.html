@@ -7,7 +7,7 @@
   <meta name="description" content="DESOLA7ED — electronic music producer and artist. Music, visual projects, and contact.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700;900&family=Space+Mono&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #0a0b0d;
@@ -25,7 +25,7 @@
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: "Figtree", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       line-height: 1.5;
       min-height: 100vh;
     }
@@ -58,16 +58,16 @@
     }
 
     .brand {
-      font-weight: 900;
+      font-weight: 500;
       font-size: 1.02rem;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.09em;
       color: var(--text);
       text-decoration: none;
     }
 
     .brand-alt {
       color: var(--muted);
-      font-weight: 700;
+      font-weight: 300;
       opacity: 0.75;
       transition: opacity 0.2s ease, color 0.2s ease;
     }
@@ -79,7 +79,7 @@
     .nav-links a {
       color: var(--muted);
       text-decoration: none;
-      font-weight: 700;
+      font-weight: 400;
       font-size: 0.82rem;
       text-transform: uppercase;
       letter-spacing: 0.08em;
@@ -144,11 +144,12 @@
     @keyframes bgIn { from { opacity: 0; } to { opacity: 1; } }
 
     .section-title {
-      font-size: 0.8rem;
+      font-family: "Space Mono", monospace;
+      font-size: 0.78rem;
       text-transform: uppercase;
-      letter-spacing: 0.18em;
+      letter-spacing: 0.22em;
       color: var(--muted);
-      font-weight: 700;
+      font-weight: 400;
       margin-bottom: 30px;
     }
 
@@ -234,6 +235,10 @@
       z-index: 1;
     }
 
+    /* inside video frames the ghosts must sit above the default-visible thumb */
+    .video-frame .ghost { z-index: 2; }
+    .video-frame { will-change: transform; }
+
     .ghost-r { filter: url(#chan-red); }
     .ghost-c { filter: url(#chan-cyan); }
 
@@ -269,16 +274,16 @@
     }
 
     .work:hover .cover-wrap::after { opacity: 1; }
-    .work.open .cover-wrap::after { content: "\00d7"; opacity: 1; }
     .work:focus-visible { outline: 2px solid var(--accent); outline-offset: 6px; border-radius: 10px; }
 
-    .work-title { font-weight: 900; font-size: clamp(1.4rem, 3.5vw, 2rem); letter-spacing: -0.01em; }
+    .work-title { font-weight: 300; font-size: clamp(1.6rem, 4vw, 2.3rem); letter-spacing: 0.01em; }
     .work-meta { color: var(--muted); font-size: 0.8rem; margin-top: 6px; }
 
     .work-links { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 8px; }
     .work-links a {
-      font-size: 0.78rem;
-      font-weight: 700;
+      font-family: "Space Mono", monospace;
+      font-size: 0.74rem;
+      font-weight: 400;
       color: var(--accent);
       text-decoration: none;
       border: 1px solid var(--border);
@@ -292,50 +297,8 @@
       outline: none;
     }
 
-    /* liner notes: hidden story revealed on click */
-    .work-story {
-      width: 100%;
-      order: 3;
-      display: grid;
-      grid-template-rows: 0fr;
-      opacity: 0;
-      transition: grid-template-rows 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.5s ease, margin-top 0.6s ease;
-      margin-top: 0;
-    }
-
-    .work.open .work-story {
-      grid-template-rows: 1fr;
-      opacity: 1;
-      margin-top: 22px;
-    }
-
-    .work-story > div { overflow: hidden; }
-
-    .work-story p {
-      font-family: "Space Mono", monospace;
-      font-size: 0.85rem;
-      line-height: 1.75;
-      color: var(--muted);
-      border-left: 2px solid var(--accent);
-      padding: 4px 0 4px 18px;
-      max-width: 640px;
-    }
-
-    .work:nth-child(even) .work-story p {
-      border-left: none;
-      border-right: 2px solid var(--accent);
-      padding: 4px 18px 4px 0;
-      margin-left: auto;
-    }
-
-    @media (max-width: 640px) {
-      .work:nth-child(even) .work-story p {
-        border-right: none;
-        border-left: 2px solid var(--accent);
-        padding: 4px 0 4px 18px;
-        margin-left: 0;
-      }
-    }
+    /* stories live hidden in the markup; the modal reads them */
+    .work-story { display: none; }
 
     /* staggered entrance rhythm */
     .reveal:nth-child(1) { transition-delay: 0.05s; }
@@ -357,10 +320,10 @@
     .videos {
       display: flex;
       flex-direction: column;
-      gap: 96px;
-      /* break out of the content column: near full-viewport width */
-      width: min(94vw, 1500px);
-      margin-left: calc(50% - min(47vw, 750px));
+      gap: 80px;
+      /* break out of the content column, but keep it navigable */
+      width: min(88vw, 1200px);
+      margin-left: calc(50% - min(44vw, 600px));
     }
 
     .video-card {
@@ -382,29 +345,38 @@
       outline: none;
     }
 
-    .video-frame { position: relative; aspect-ratio: 16 / 9; background: #14171c; }
+    .video-frame { position: relative; aspect-ratio: 21 / 9; background: #14171c; overflow: hidden; }
     .video-frame iframe {
+      /* 16:9 video cropped to fill the flatter 21:9 window */
       position: absolute;
-      inset: 0;
+      left: 0;
+      top: 50%;
       width: 100%;
-      height: 100%;
+      height: 131.25%; /* 21/16 */
+      transform: translateY(-50%);
       border: 0;
       pointer-events: none; /* clicks fall through to the card link */
     }
 
-    /* the cover fades in over the playing preview on hover */
+    @media (max-width: 640px) {
+      .video-frame { aspect-ratio: 16 / 9; }
+      .video-frame iframe { height: 100%; top: 0; transform: none; }
+    }
+
+    /* cover shown by default; hover dissolves it into the playing preview */
     .video-thumb {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
-      opacity: 0;
-      transition: opacity 0.35s ease;
+      opacity: 1;
+      transition: opacity 0.5s ease;
       pointer-events: none;
+      z-index: 1;
     }
 
-    .video-card:hover .video-thumb, .video-card:focus-visible .video-thumb { opacity: 1; }
+    .video-card:hover .video-thumb, .video-card:focus-visible .video-thumb { opacity: 0; }
 
     /* corner hint so people know the card is a link */
     .video-frame::after {
@@ -420,7 +392,7 @@
       opacity: 0;
       transition: opacity 0.3s ease;
       pointer-events: none;
-      z-index: 1;
+      z-index: 2;
     }
 
     .video-card:hover .video-frame::after, .video-card:focus-visible .video-frame::after { opacity: 1; }
@@ -429,8 +401,8 @@
 
     /* ---------- Recognition list ---------- */
     .recognition {
-      width: min(94vw, 1500px);
-      margin: 96px 0 0 calc(50% - min(47vw, 750px));
+      width: min(88vw, 1200px);
+      margin: 88px 0 0 calc(50% - min(44vw, 600px));
     }
 
     .recognition-inner { max-width: 720px; margin: 0 auto; }
@@ -449,10 +421,10 @@
 
     .laurel-list li:first-child { border-top: 1px solid var(--border); }
 
-    .laurel-fest { color: var(--text); font-weight: 600; }
+    .laurel-fest { color: var(--text); font-weight: 400; }
     .laurel-status { color: var(--muted); font-size: 0.78rem; white-space: nowrap; }
     .laurel-status.hl { color: var(--accent); }
-    .video-title { font-weight: 900; font-size: 1.25rem; }
+    .video-title { font-weight: 300; font-size: 1.4rem; letter-spacing: 0.02em; }
     .video-meta { color: var(--muted); font-size: 0.8rem; margin-top: 3px; }
 
     /* ---------- About ---------- */
@@ -467,7 +439,7 @@
     }
 
     .bio { max-width: 760px; margin: 0 auto; }
-    .bio p { color: var(--text); font-size: 1.08rem; line-height: 1.85; margin-bottom: 18px; }
+    .bio p { color: var(--text); font-size: 1.08rem; font-weight: 300; line-height: 1.95; margin-bottom: 18px; }
     .bio-sig { color: var(--muted); font-size: 0.9rem; text-align: right; }
 
     /* ---------- Contact ---------- */
@@ -478,7 +450,8 @@
       max-width: 540px;
       margin: 0 auto 34px;
       font-size: 1rem;
-      line-height: 1.8;
+      font-weight: 300;
+      line-height: 1.9;
     }
 
     .signature {
@@ -492,7 +465,8 @@
     .email a {
       color: var(--accent);
       font-size: clamp(1.1rem, 4vw, 1.5rem);
-      font-weight: 700;
+      font-weight: 300;
+      letter-spacing: 0.03em;
       text-decoration: none;
       word-break: break-all;
     }
@@ -526,6 +500,142 @@
       border-color: var(--accent);
       color: var(--accent);
       outline: none;
+    }
+
+    /* ---------- Track modal (listening room) ---------- */
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 250;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 28px;
+    }
+
+    .modal.open { display: flex; }
+
+    .modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(6, 7, 9, 0.78);
+      backdrop-filter: blur(14px);
+      cursor: pointer;
+    }
+
+    .modal-card {
+      position: relative;
+      background: rgba(16, 18, 23, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      width: min(920px, 100%);
+      max-height: 88vh;
+      overflow-y: auto;
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      box-shadow: 0 40px 120px rgba(0, 0, 0, 0.6);
+      animation: modalIn 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    }
+
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(30px) scale(0.96); filter: blur(10px); }
+      to { opacity: 1; transform: none; filter: blur(0); }
+    }
+
+    .modal-cover {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border-radius: 16px 0 0 16px;
+      min-height: 340px;
+    }
+
+    .modal-body { padding: 34px 34px 28px; display: flex; flex-direction: column; }
+
+    .modal-title { font-weight: 300; font-size: 1.9rem; letter-spacing: 0.01em; }
+    .modal-meta { font-family: "Space Mono", monospace; color: var(--muted); font-size: 0.78rem; margin-top: 6px; }
+
+    .modal-story {
+      font-family: "Space Mono", monospace;
+      font-size: 0.85rem;
+      line-height: 1.85;
+      color: var(--muted);
+      border-left: 2px solid var(--accent);
+      padding-left: 18px;
+      margin: 24px 0;
+      flex: 1;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 14px; right: 18px;
+      font-size: 1.7rem;
+      font-weight: 300;
+      color: var(--muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      line-height: 1;
+      z-index: 1;
+      transition: color 0.2s ease, transform 0.2s ease;
+    }
+    .modal-close:hover { color: var(--text); transform: rotate(90deg); }
+
+    /* mini player */
+    .player { display: flex; align-items: center; gap: 14px; margin-top: auto; }
+    .player.hidden { display: none; }
+
+    .player-btn {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: 1px solid var(--accent);
+      background: rgba(168, 157, 221, 0.1);
+      color: var(--accent);
+      cursor: pointer;
+      font-size: 0.95rem;
+      flex-shrink: 0;
+      transition: background 0.2s ease, transform 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .player-btn:hover { background: rgba(168, 157, 221, 0.22); transform: scale(1.06); }
+
+    .player-track {
+      flex: 1;
+      height: 3px;
+      background: var(--border);
+      border-radius: 999px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .player-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--accent);
+      border-radius: 999px;
+      position: relative;
+    }
+
+    .player-fill::after {
+      content: "";
+      position: absolute;
+      right: -4px; top: 50%;
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      background: var(--accent);
+      transform: translateY(-50%);
+    }
+
+    .player-time { font-family: "Space Mono", monospace; font-size: 0.7rem; color: var(--muted); flex-shrink: 0; }
+
+    @media (max-width: 720px) {
+      .modal-card { grid-template-columns: 1fr; max-height: 90vh; }
+      .modal-cover { border-radius: 16px 16px 0 0; min-height: 0; aspect-ratio: 1 / 1; max-height: 38vh; }
+      .modal-body { padding: 24px 22px 20px; }
     }
 
     footer {
@@ -575,7 +685,7 @@
     <section class="panel active" id="music">
       <h2 class="section-title">Music</h2>
       <div class="works">
-        <article class="work reveal" data-full="https://i1.sndcdn.com/artworks-yvDxNkbXeGlF3xny-EmeMvg-t1080x1080.png" tabindex="0" role="button" aria-label="flicker — click for liner notes">
+        <article class="work reveal" data-full="https://i1.sndcdn.com/artworks-yvDxNkbXeGlF3xny-EmeMvg-t1080x1080.png" tabindex="0" role="button" aria-label="flicker — click for liner notes" data-audio="audio/flicker.mp3">
           <div class="cover-wrap"><img src="https://i1.sndcdn.com/artworks-yvDxNkbXeGlF3xny-EmeMvg-t500x500.png" alt="flicker cover art" loading="lazy"></div>
           <div class="work-info">
             <div class="work-title">flicker</div>
@@ -584,10 +694,10 @@
             <a href="https://soundcloud.com/d7d77/d7-flicker" target="_blank" rel="noopener" onclick="event.stopPropagation()">SoundCloud</a>
             </div>
           </div>
-          <div class="work-story"><div><p>I started this brief demo in 2022 after finishing 風. Found it while trying to back up my work in 2025 and made some minor refinements before releasing it on NetEase. Probably my most signature distortion sound. One of my friends played it in my apartment and asked me if my speaker was broken.</p></div></div>
+          <div class="work-story"><div><p>I started this brief demo in 2022 after finishing 風. Found it while trying to back up my work in 2025 and made some minor refinements before releasing it on NetEase. Probably my most signature distortion sound. One of my friends played it in their car and asked me if their speaker was broken.</p></div></div>
         </article>
 
-        <article class="work reveal" data-full="https://i.scdn.co/image/ab67616d0000b273e6b4eee82f2c5c635775f1bd" tabindex="0" role="button" aria-label="射手座 — click for liner notes">
+        <article class="work reveal" data-full="https://i.scdn.co/image/ab67616d0000b273e6b4eee82f2c5c635775f1bd" tabindex="0" role="button" aria-label="射手座 — click for liner notes" data-audio="audio/sagittarius.mp3">
           <div class="cover-wrap"><img src="https://i.scdn.co/image/ab67616d0000b273e6b4eee82f2c5c635775f1bd" alt="射手座 cover art" loading="lazy"></div>
           <div class="work-info">
             <div class="work-title">射手座</div>
@@ -596,10 +706,10 @@
             <a href="https://open.spotify.com/track/12mLUIpx50Eba8iArLFSpo" target="_blank" rel="noopener" onclick="event.stopPropagation()">Spotify</a>
             </div>
           </div>
-          <div class="work-story"><div><p>Started in 2023, but didn’t have the courage to finish it until 2025, when its submission deadline had passed by probably over a month. I had over 30 different versions of this song and listened to it I don't even know how many times. The chord progression was probably on its 11th version. There are at three intentional flaws I left in the song to help me stay fixated on them and be satisfied with the rest of the song, so that I wouldn’t drive myself insane. Bit pathetic, if you ask me.</p></div></div>
+          <div class="work-story"><div><p>Started in 2023, but didn’t have the courage to finish it until 2025, when its submission deadline had passed by probably over a month. I probably had 30 different versions of this song and listened to it 10 thousand times +. The chord progression was probably on its 11th version. There are at least three intentional flaws I left in the song to help me stay fixated on them and be satisfied with the rest of the song, so that I wouldn’t drive myself insane. A bit pathetic, if you ask me.</p></div></div>
         </article>
 
-        <article class="work reveal" data-full="https://i.scdn.co/image/ab67616d0000b2736658aad9833a69bf84d38a43" tabindex="0" role="button" aria-label="Take Me — click for liner notes">
+        <article class="work reveal" data-full="https://i.scdn.co/image/ab67616d0000b2736658aad9833a69bf84d38a43" tabindex="0" role="button" aria-label="Take Me — click for liner notes" data-audio="audio/take-me.mp3">
           <div class="cover-wrap"><img src="https://i.scdn.co/image/ab67616d0000b2736658aad9833a69bf84d38a43" alt="Take Me cover art" loading="lazy"></div>
           <div class="work-info">
             <div class="work-title">Take Me</div>
@@ -611,7 +721,7 @@
           <div class="work-story"><div><p>A collaboration edit on my previous track ‘just take me with you’. Got rid of the vocals that drove some of my friends insane and focused mainly on amplifying the impact of the drop and conveying the emotion of xxhyz’s visuals. Theme was also fire: fish migrating.</p></div></div>
         </article>
 
-        <article class="work reveal" data-full="https://i.scdn.co/image/ab67616d0000b2737c6c1525aa0fa1e2999ed853" tabindex="0" role="button" aria-label="風 — click for liner notes">
+        <article class="work reveal" data-full="https://i.scdn.co/image/ab67616d0000b2737c6c1525aa0fa1e2999ed853" tabindex="0" role="button" aria-label="風 — click for liner notes" data-audio="audio/feng.mp3">
           <div class="cover-wrap"><img src="https://i.scdn.co/image/ab67616d0000b2737c6c1525aa0fa1e2999ed853" alt="風 cover art" loading="lazy"></div>
           <div class="work-info">
             <div class="work-title">風</div>
@@ -623,7 +733,7 @@
           <div class="work-story"><div><p>Written in 2021 for Christy, my girlfriend of 4 years. Bara du.</p></div></div>
         </article>
 
-        <article class="work reveal" data-full="https://i.scdn.co/image/ab67616d0000b273b91f21a06eee9617ac770495" tabindex="0" role="button" aria-label="just take me with you — click for liner notes">
+        <article class="work reveal" data-full="https://i.scdn.co/image/ab67616d0000b273b91f21a06eee9617ac770495" tabindex="0" role="button" aria-label="just take me with you — click for liner notes" data-audio="audio/just-take-me-with-you.mp3">
           <div class="cover-wrap"><img src="https://i.scdn.co/image/ab67616d0000b273b91f21a06eee9617ac770495" alt="just take me with you cover art" loading="lazy"></div>
           <div class="work-info">
             <div class="work-title">just take me with you</div>
@@ -632,7 +742,7 @@
             <a href="https://open.spotify.com/track/1NNcWnbwCqmmtlRatAMCQp" target="_blank" rel="noopener" onclick="event.stopPropagation()">Spotify</a>
             </div>
           </div>
-          <div class="work-story"><div><p>First release on PHONO records. Pressure is building. People are watching. What will he deliver? Oh nothing much only a horrible mixdown, a break that he wrote in about 30s which essentially is just him dumping kicks all over the daw and a pathetically 1:20 long second drop to cover up his insecure ass. Got a follow from his favorite monstercat producer tho lol.</p></div></div>
+          <div class="work-story"><div><p>First release on PHONO records. Pressure is building. People are watching. What will he deliver? Oh nothing much only a horrible mixdown, a break that he wrote in about 30s which essentially is just him shitting kicks all over the daw and a pathetically 1:20 long second drop to cover up his insecure ass. Got a follow from his favorite monstercat producer tho.</p></div></div>
         </article>
       </div>
     </section>
@@ -641,24 +751,24 @@
     <section class="panel" id="visuals">
       <h2 class="section-title">Visual Projects</h2>
       <div class="videos">
-        <a class="video-card reveal" href="https://www.youtube.com/watch?v=y1nbNsHS4lo" target="_blank" rel="noopener" aria-label="風 — watch on YouTube">
+        <a class="video-card reveal" href="https://www.youtube.com/watch?v=y1nbNsHS4lo" target="_blank" rel="noopener" aria-label="Take Me — watch on YouTube">
           <div class="video-frame">
-            <iframe src="https://www.youtube-nocookie.com/embed/y1nbNsHS4lo?autoplay=1&mute=1&loop=1&playlist=y1nbNsHS4lo&rel=0&playsinline=1&controls=0&enablejsapi=1" title="風 — visual w/ XXHYZ" tabindex="-1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
-            <img class="video-thumb" src="https://i.ytimg.com/vi/y1nbNsHS4lo/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/y1nbNsHS4lo/hqdefault.jpg'" alt="">
+            <iframe src="https://www.youtube-nocookie.com/embed/y1nbNsHS4lo?autoplay=1&mute=1&loop=1&playlist=y1nbNsHS4lo&rel=0&playsinline=1&controls=0&enablejsapi=1" title="Take Me — visual w/ XXHYZ" tabindex="-1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+            <img class="video-thumb" src="covers/takeme.jpg" alt="Take Me — visual cover">
           </div>
           <div class="video-info">
-            <div class="video-title">風</div>
+            <div class="video-title">Take Me</div>
             <div class="video-meta mono">visual collaboration w/ XXHYZ</div>
           </div>
         </a>
 
-        <a class="video-card reveal" href="https://www.youtube.com/watch?v=kdh3zKvuohE" target="_blank" rel="noopener" aria-label="Take Me — watch on YouTube">
+        <a class="video-card reveal" href="https://www.youtube.com/watch?v=kdh3zKvuohE" target="_blank" rel="noopener" aria-label="風 — watch on YouTube">
           <div class="video-frame">
-            <iframe src="https://www.youtube-nocookie.com/embed/kdh3zKvuohE?autoplay=1&mute=1&loop=1&playlist=kdh3zKvuohE&rel=0&playsinline=1&controls=0&enablejsapi=1" title="Take Me — visual w/ XXHYZ" tabindex="-1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
-            <img class="video-thumb" src="https://i.ytimg.com/vi/kdh3zKvuohE/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/kdh3zKvuohE/hqdefault.jpg'" alt="">
+            <iframe src="https://www.youtube-nocookie.com/embed/kdh3zKvuohE?autoplay=1&mute=1&loop=1&playlist=kdh3zKvuohE&rel=0&playsinline=1&controls=0&enablejsapi=1" title="風 — visual w/ XXHYZ" tabindex="-1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+            <img class="video-thumb" src="covers/feng.jpg" alt="風 — visual cover">
           </div>
           <div class="video-info">
-            <div class="video-title">Take Me</div>
+            <div class="video-title">風</div>
             <div class="video-meta mono">visual collaboration w/ XXHYZ</div>
           </div>
         </a>
@@ -719,6 +829,26 @@
       </div>
     </section>
   </main>
+
+  <!-- ================= TRACK MODAL ================= -->
+  <div class="modal" id="track-modal" role="dialog" aria-modal="true" aria-label="Track details">
+    <div class="modal-backdrop"></div>
+    <div class="modal-card">
+      <button class="modal-close" aria-label="Close">&times;</button>
+      <img class="modal-cover" src="" alt="">
+      <div class="modal-body">
+        <div class="modal-title"></div>
+        <div class="modal-meta"></div>
+        <div class="modal-story"></div>
+        <div class="player hidden">
+          <button class="player-btn" aria-label="Play">&#9654;</button>
+          <div class="player-track"><div class="player-fill"></div></div>
+          <div class="player-time">0:00</div>
+        </div>
+        <audio class="modal-audio" preload="none"></audio>
+      </div>
+    </div>
+  </div>
 
   <footer>
     DESOLA7ED · lanrr.bobby@gmail.com · &copy; 2026 All rights reserved.
@@ -790,9 +920,9 @@
       window.addEventListener("scroll", () => { if (!raf) syncScroll(); });
     }
 
-    /* ---------- Magnetic pull + RGB glitch flash on covers ---------- */
+    /* ---------- Magnetic pull + RGB glitch flash (music covers + visual cards) ---------- */
     if (fineHover && !reducedMotion) {
-      document.querySelectorAll(".cover-wrap").forEach(wrap => {
+      document.querySelectorAll(".cover-wrap, .video-frame").forEach(wrap => {
         const base = wrap.querySelector("img");
         if (!base) return;
 
@@ -806,16 +936,18 @@
         ghostC.removeAttribute("loading");
         wrap.append(ghostR, ghostC);
 
-        const pull = 10;   // how far the cover drifts toward the cursor (px)
-        const split = 16;  // channel separation during the entry flash (px)
+        const isVideo = wrap.classList.contains("video-frame");
+        const moveTarget = isVideo ? wrap.closest(".video-card") : wrap;
+        const pull = isVideo ? 6 : 10;   // gentler drift for the big video cards
+        const split = 16;                // channel separation during the entry flash (px)
         let flashTimer = null;
 
         const move = e => {
           const r = wrap.getBoundingClientRect();
           const dx = (e.clientX - r.left) / r.width - 0.5;   // -0.5..0.5
           const dy = (e.clientY - r.top) / r.height - 0.5;
-          wrap.style.transition = "box-shadow 0.5s ease";
-          wrap.style.transform = `translate(${dx * pull}px, ${dy * pull}px) scale(1.02)`;
+          moveTarget.style.transition = "box-shadow 0.5s ease";
+          moveTarget.style.transform = `translate(${dx * pull}px, ${dy * pull}px) scale(${isVideo ? 1.005 : 1.02})`;
           wrap.style.setProperty("--mx", `${(dx + 0.5) * 100}%`);
           wrap.style.setProperty("--my", `${(dy + 0.5) * 100}%`);
         };
@@ -839,8 +971,8 @@
         };
 
         const leave = () => {
-          wrap.style.transition = "transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.5s ease";
-          wrap.style.transform = "translate(0, 0) scale(1)";
+          moveTarget.style.transition = "transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.5s ease";
+          moveTarget.style.transform = "translate(0, 0) scale(1)";
           clearTimeout(flashTimer);
           ghostR.style.transform = ghostC.style.transform = "translate(0, 0)";
           ghostR.style.opacity = ghostC.style.opacity = 0;
@@ -852,16 +984,89 @@
       });
     }
 
-    /* ---------- Liner notes: click a cover to reveal its story ---------- */
+    /* ---------- Track modal: cover click opens story + player ---------- */
+    const modal = document.getElementById("track-modal");
+    const mCover = modal.querySelector(".modal-cover");
+    const mTitle = modal.querySelector(".modal-title");
+    const mMeta = modal.querySelector(".modal-meta");
+    const mStory = modal.querySelector(".modal-story");
+    const player = modal.querySelector(".player");
+    const playBtn = modal.querySelector(".player-btn");
+    const trackBar = modal.querySelector(".player-track");
+    const trackFill = modal.querySelector(".player-fill");
+    const timeLabel = modal.querySelector(".player-time");
+    const audio = modal.querySelector(".modal-audio");
+
+    const fmt = s => isFinite(s) ? `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}` : "0:00";
+
+    function openModal(work) {
+      const img = work.querySelector(".cover-wrap img");
+      mCover.src = work.dataset.full || (img ? img.src : "");
+      mCover.alt = "";
+      mTitle.textContent = work.querySelector(".work-title").textContent;
+      mMeta.textContent = work.querySelector(".work-meta").textContent;
+      const story = work.querySelector(".work-story p");
+      mStory.textContent = story ? story.textContent : "";
+
+      // audio: only show the player if the file actually exists
+      player.classList.add("hidden");
+      playBtn.innerHTML = "&#9654;";
+      trackFill.style.width = "0%";
+      timeLabel.textContent = "0:00";
+      if (work.dataset.audio) {
+        audio.src = work.dataset.audio;
+        audio.load();
+      }
+
+      modal.classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeModal() {
+      modal.classList.remove("open");
+      document.body.style.overflow = "";
+      audio.pause();
+      audio.removeAttribute("src");
+      audio.load(); // fully stop the sound and reset
+    }
+
+    audio.addEventListener("loadedmetadata", () => {
+      player.classList.remove("hidden");
+      timeLabel.textContent = fmt(audio.duration);
+    });
+    audio.addEventListener("error", () => player.classList.add("hidden"));
+
+    playBtn.addEventListener("click", () => {
+      if (audio.paused) { audio.play(); playBtn.innerHTML = "&#10073;&#10073;"; }
+      else { audio.pause(); playBtn.innerHTML = "&#9654;"; }
+    });
+
+    audio.addEventListener("timeupdate", () => {
+      if (!audio.duration) return;
+      trackFill.style.width = `${(audio.currentTime / audio.duration) * 100}%`;
+      timeLabel.textContent = `${fmt(audio.currentTime)} / ${fmt(audio.duration)}`;
+    });
+
+    audio.addEventListener("ended", () => { playBtn.innerHTML = "&#9654;"; trackFill.style.width = "0%"; });
+
+    trackBar.addEventListener("click", e => {
+      if (!audio.duration) return;
+      const r = trackBar.getBoundingClientRect();
+      audio.currentTime = ((e.clientX - r.left) / r.width) * audio.duration;
+    });
+
+    modal.querySelector(".modal-backdrop").addEventListener("click", closeModal);
+    modal.querySelector(".modal-close").addEventListener("click", closeModal);
+    document.addEventListener("keydown", e => { if (e.key === "Escape" && modal.classList.contains("open")) closeModal(); });
+
     document.querySelectorAll(".work").forEach(work => {
-      const toggle = e => {
-        // don't toggle when a platform link inside the card was clicked
-        if (e.target.closest("a")) return;
-        work.classList.toggle("open");
+      const open = e => {
+        if (e.target.closest("a")) return; // platform links pass through
+        openModal(work);
       };
-      work.addEventListener("click", toggle);
+      work.addEventListener("click", open);
       work.addEventListener("keydown", e => {
-        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); work.classList.toggle("open"); }
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openModal(work); }
       });
     });
 
