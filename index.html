@@ -20,6 +20,7 @@
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { overflow-x: hidden; }
 
     body {
       background: var(--bg);
@@ -99,12 +100,48 @@
     }
 
     .panel { display: none; }
-    .panel.active { display: block; animation: panelIn 0.45s ease both; }
+    .panel.active { display: block; animation: panelIn 0.65s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
 
     @keyframes panelIn {
-      from { opacity: 0; transform: translateY(14px); }
-      to { opacity: 1; transform: none; }
+      from { opacity: 0; transform: translateY(22px); filter: blur(10px); }
+      to { opacity: 1; transform: none; filter: blur(0); }
     }
+
+    /* ---------- Intro veil ---------- */
+    .veil {
+      position: fixed;
+      inset: 0;
+      z-index: 300;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.9s ease;
+    }
+
+    .veil span {
+      color: var(--text);
+      font-size: clamp(1rem, 3vw, 1.4rem);
+      letter-spacing: 0.35em;
+      opacity: 0;
+      animation: veilText 1.2s ease 0.15s forwards;
+    }
+
+    @keyframes veilText {
+      from { opacity: 0; letter-spacing: 0.55em; filter: blur(6px); }
+      to { opacity: 1; letter-spacing: 0.35em; filter: blur(0); }
+    }
+
+    .veil.hide { opacity: 0; pointer-events: none; }
+
+    /* page entrance */
+    nav { animation: navIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+    @keyframes navIn {
+      from { transform: translateY(-100%); opacity: 0; }
+      to { transform: none; opacity: 1; }
+    }
+    .bg { animation: bgIn 1.6s ease both; }
+    @keyframes bgIn { from { opacity: 0; } to { opacity: 1; } }
 
     .section-title {
       font-size: 0.8rem;
@@ -116,8 +153,13 @@
     }
 
     /* Scroll-reveal */
-    .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.6s ease, transform 0.6s ease; }
-    .reveal.in { opacity: 1; transform: none; }
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      filter: blur(8px);
+      transition: opacity 0.85s ease, transform 0.85s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.85s ease;
+    }
+    .reveal.in { opacity: 1; transform: none; filter: blur(0); }
 
     @media (prefers-reduced-motion: reduce) {
       .panel.active { animation: none; }
@@ -138,6 +180,7 @@
       display: flex;
       align-items: flex-end;
       gap: 36px;
+      flex-wrap: wrap;
     }
 
     /* alternate sides so the page zigzags down */
@@ -211,10 +254,10 @@
     .work:hover .cover-wrap::before { opacity: 1; }
 
     .cover-wrap::after {
-      content: "⤢";
+      content: "+";
       position: absolute;
       right: 10px; bottom: 8px;
-      font-size: 1rem;
+      font-size: 0.7rem;
       color: var(--text);
       background: rgba(10, 11, 13, 0.6);
       border-radius: 6px;
@@ -226,6 +269,7 @@
     }
 
     .work:hover .cover-wrap::after { opacity: 1; }
+    .work.open .cover-wrap::after { content: "\00d7"; opacity: 1; }
     .work:focus-visible { outline: 2px solid var(--accent); outline-offset: 6px; border-radius: 10px; }
 
     .work-title { font-weight: 900; font-size: clamp(1.4rem, 3.5vw, 2rem); letter-spacing: -0.01em; }
@@ -248,12 +292,58 @@
       outline: none;
     }
 
+    /* liner notes: hidden story revealed on click */
+    .work-story {
+      width: 100%;
+      order: 3;
+      display: grid;
+      grid-template-rows: 0fr;
+      opacity: 0;
+      transition: grid-template-rows 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.5s ease, margin-top 0.6s ease;
+      margin-top: 0;
+    }
+
+    .work.open .work-story {
+      grid-template-rows: 1fr;
+      opacity: 1;
+      margin-top: 22px;
+    }
+
+    .work-story > div { overflow: hidden; }
+
+    .work-story p {
+      font-family: "Space Mono", monospace;
+      font-size: 0.85rem;
+      line-height: 1.75;
+      color: var(--muted);
+      border-left: 2px solid var(--accent);
+      padding: 4px 0 4px 18px;
+      max-width: 640px;
+    }
+
+    .work:nth-child(even) .work-story p {
+      border-left: none;
+      border-right: 2px solid var(--accent);
+      padding: 4px 18px 4px 0;
+      margin-left: auto;
+    }
+
+    @media (max-width: 640px) {
+      .work:nth-child(even) .work-story p {
+        border-right: none;
+        border-left: 2px solid var(--accent);
+        padding: 4px 0 4px 18px;
+        margin-left: 0;
+      }
+    }
+
     /* staggered entrance rhythm */
-    .reveal:nth-child(1) { transition-delay: 0s; }
-    .reveal:nth-child(2) { transition-delay: 0.08s; }
-    .reveal:nth-child(3) { transition-delay: 0.16s; }
-    .reveal:nth-child(4) { transition-delay: 0.24s; }
-    .reveal:nth-child(5) { transition-delay: 0.32s; }
+    .reveal:nth-child(1) { transition-delay: 0.05s; }
+    .reveal:nth-child(2) { transition-delay: 0.18s; }
+    .reveal:nth-child(3) { transition-delay: 0.31s; }
+    .reveal:nth-child(4) { transition-delay: 0.44s; }
+    .reveal:nth-child(5) { transition-delay: 0.57s; }
+    .reveal:nth-child(6) { transition-delay: 0.7s; }
 
     @media (max-width: 640px) {
       .works { gap: 56px; }
@@ -267,9 +357,10 @@
     .videos {
       display: flex;
       flex-direction: column;
-      gap: 72px;
-      max-width: 860px;
-      margin: 0 auto;
+      gap: 96px;
+      /* break out of the content column: near full-viewport width */
+      width: min(94vw, 1500px);
+      margin-left: calc(50% - min(47vw, 750px));
     }
 
     .video-card {
@@ -335,6 +426,32 @@
     .video-card:hover .video-frame::after, .video-card:focus-visible .video-frame::after { opacity: 1; }
 
     .video-info { padding: 16px 20px 18px; }
+
+    /* ---------- Recognition list ---------- */
+    .recognition {
+      width: min(94vw, 1500px);
+      margin: 96px 0 0 calc(50% - min(47vw, 750px));
+    }
+
+    .recognition-inner { max-width: 720px; margin: 0 auto; }
+
+    .laurel-list { list-style: none; }
+
+    .laurel-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 20px;
+      padding: 13px 2px;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.92rem;
+    }
+
+    .laurel-list li:first-child { border-top: 1px solid var(--border); }
+
+    .laurel-fest { color: var(--text); font-weight: 600; }
+    .laurel-status { color: var(--muted); font-size: 0.78rem; white-space: nowrap; }
+    .laurel-status.hl { color: var(--accent); }
     .video-title { font-weight: 900; font-size: 1.25rem; }
     .video-meta { color: var(--muted); font-size: 0.8rem; margin-top: 3px; }
 
@@ -349,27 +466,20 @@
       margin-bottom: 36px;
     }
 
-    .about-grid {
-      display: grid;
-      grid-template-columns: 260px 1fr;
-      gap: 40px;
-      align-items: start;
-    }
-
-    .about-photo {
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      object-fit: cover;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-    }
-
-    .bio p { color: var(--text); font-size: 1.05rem; margin-bottom: 18px; }
-    .bio p:last-child { color: var(--muted); }
-    .bio-sig { color: var(--muted); font-size: 0.9rem; margin-top: -6px; }
+    .bio { max-width: 760px; margin: 0 auto; }
+    .bio p { color: var(--text); font-size: 1.08rem; line-height: 1.85; margin-bottom: 18px; }
+    .bio-sig { color: var(--muted); font-size: 0.9rem; text-align: right; }
 
     /* ---------- Contact ---------- */
     #contact { text-align: center; }
+
+    .contact-note {
+      color: var(--muted);
+      max-width: 540px;
+      margin: 0 auto 34px;
+      font-size: 1rem;
+      line-height: 1.8;
+    }
 
     .signature {
       max-width: 420px;
@@ -418,32 +528,6 @@
       outline: none;
     }
 
-    /* ---------- Lightbox ---------- */
-    .lightbox {
-      position: fixed;
-      inset: 0;
-      background: rgba(5, 6, 8, 0.94);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 200;
-      padding: 40px;
-      cursor: zoom-out;
-    }
-    .lightbox.open { display: flex; }
-    .lightbox img { max-width: 100%; max-height: 100%; border-radius: 6px; }
-    .lightbox-close {
-      position: absolute;
-      top: 18px; right: 26px;
-      font-size: 2rem;
-      color: var(--muted);
-      background: none;
-      border: none;
-      cursor: pointer;
-      line-height: 1;
-    }
-    .lightbox-close:hover { color: var(--text); }
-
     footer {
       border-top: 1px solid var(--border);
       padding: 26px 24px;
@@ -454,14 +538,15 @@
     }
 
     @media (max-width: 640px) {
-      .about-grid { grid-template-columns: 1fr; }
-      .about-photo { max-width: 300px; }
       .nav-links a { padding: 8px 7px; font-size: 0.72rem; }
       .about-header { aspect-ratio: 16 / 9; }
     }
   </style>
 </head>
 <body>
+  <!-- intro veil -->
+  <div class="veil" id="veil" aria-hidden="true"><span class="mono">d7 / DESOLA7ED</span></div>
+
   <!-- color-channel filters for the RGB-split hover -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
     <defs>
@@ -490,7 +575,7 @@
     <section class="panel active" id="music">
       <h2 class="section-title">Music</h2>
       <div class="works">
-        <article class="work reveal" data-full="https://i1.sndcdn.com/artworks-yvDxNkbXeGlF3xny-EmeMvg-t1080x1080.png" tabindex="0" role="button" aria-label="View flicker cover">
+        <article class="work reveal" data-full="https://i1.sndcdn.com/artworks-yvDxNkbXeGlF3xny-EmeMvg-t1080x1080.png" tabindex="0" role="button" aria-label="flicker — click for liner notes">
           <div class="cover-wrap"><img src="https://i1.sndcdn.com/artworks-yvDxNkbXeGlF3xny-EmeMvg-t500x500.png" alt="flicker cover art" loading="lazy"></div>
           <div class="work-info">
             <div class="work-title">flicker</div>
@@ -499,9 +584,10 @@
             <a href="https://soundcloud.com/d7d77/d7-flicker" target="_blank" rel="noopener" onclick="event.stopPropagation()">SoundCloud</a>
             </div>
           </div>
+          <div class="work-story"><div><p>I started this brief demo in 2022 after finishing 風. Found it while trying to back up my work in 2025 and made some minor refinements before releasing it on NetEase. Probably my most signature distortion sound. One of my friends played it in their car and asked me if their speaker was broken.</p></div></div>
         </article>
 
-        <article class="work reveal" data-full="https://i.scdn.co/image/ab67616d0000b273e6b4eee82f2c5c635775f1bd" tabindex="0" role="button" aria-label="View 射手座 cover">
+        <article class="work reveal" data-full="https://i.scdn.co/image/ab67616d0000b273e6b4eee82f2c5c635775f1bd" tabindex="0" role="button" aria-label="射手座 — click for liner notes">
           <div class="cover-wrap"><img src="https://i.scdn.co/image/ab67616d0000b273e6b4eee82f2c5c635775f1bd" alt="射手座 cover art" loading="lazy"></div>
           <div class="work-info">
             <div class="work-title">射手座</div>
@@ -510,9 +596,10 @@
             <a href="https://open.spotify.com/track/12mLUIpx50Eba8iArLFSpo" target="_blank" rel="noopener" onclick="event.stopPropagation()">Spotify</a>
             </div>
           </div>
+          <div class="work-story"><div><p>Started in 2023, but didn’t have the courage to finish it until 2025, when its submission deadline had passed by probably over a month. I probably had 30 different versions of this song and listened to it 10 thousand times +. The chord progression was probably on its 11th version. There are at least three intentional flaws I left in the song to help me stay fixated on them and be satisfied with the rest of the song, so that I wouldn’t drive myself insane. A bit pathetic, if you ask me.</p></div></div>
         </article>
 
-        <article class="work reveal" data-full="https://i.scdn.co/image/ab67616d0000b2736658aad9833a69bf84d38a43" tabindex="0" role="button" aria-label="View Take Me cover">
+        <article class="work reveal" data-full="https://i.scdn.co/image/ab67616d0000b2736658aad9833a69bf84d38a43" tabindex="0" role="button" aria-label="Take Me — click for liner notes">
           <div class="cover-wrap"><img src="https://i.scdn.co/image/ab67616d0000b2736658aad9833a69bf84d38a43" alt="Take Me cover art" loading="lazy"></div>
           <div class="work-info">
             <div class="work-title">Take Me</div>
@@ -521,9 +608,10 @@
             <a href="https://open.spotify.com/track/7g9YU6AF4lztuERI0XLNNb" target="_blank" rel="noopener" onclick="event.stopPropagation()">Spotify</a>
             </div>
           </div>
+          <div class="work-story"><div><p>A collaboration edit on my previous track ‘just take me with you’. Got rid of the vocals that drove some of my friends insane and focused mainly on amplifying the impact of the drop and conveying the emotion of xxhyz’s visuals. Theme was also fire: fish migrating.</p></div></div>
         </article>
 
-        <article class="work reveal" data-full="https://i.scdn.co/image/ab67616d0000b2737c6c1525aa0fa1e2999ed853" tabindex="0" role="button" aria-label="View 風 cover">
+        <article class="work reveal" data-full="https://i.scdn.co/image/ab67616d0000b2737c6c1525aa0fa1e2999ed853" tabindex="0" role="button" aria-label="風 — click for liner notes">
           <div class="cover-wrap"><img src="https://i.scdn.co/image/ab67616d0000b2737c6c1525aa0fa1e2999ed853" alt="風 cover art" loading="lazy"></div>
           <div class="work-info">
             <div class="work-title">風</div>
@@ -532,9 +620,10 @@
             <a href="https://open.spotify.com/track/25W1j4BqPS7x7QhwtEq9kC" target="_blank" rel="noopener" onclick="event.stopPropagation()">Spotify</a>
             </div>
           </div>
+          <div class="work-story"><div><p>Written in 2021 for Christy, my girlfriend of 4 years. Bara du.</p></div></div>
         </article>
 
-        <article class="work reveal" data-full="https://i.scdn.co/image/ab67616d0000b273b91f21a06eee9617ac770495" tabindex="0" role="button" aria-label="View just take me with you cover">
+        <article class="work reveal" data-full="https://i.scdn.co/image/ab67616d0000b273b91f21a06eee9617ac770495" tabindex="0" role="button" aria-label="just take me with you — click for liner notes">
           <div class="cover-wrap"><img src="https://i.scdn.co/image/ab67616d0000b273b91f21a06eee9617ac770495" alt="just take me with you cover art" loading="lazy"></div>
           <div class="work-info">
             <div class="work-title">just take me with you</div>
@@ -543,6 +632,7 @@
             <a href="https://open.spotify.com/track/1NNcWnbwCqmmtlRatAMCQp" target="_blank" rel="noopener" onclick="event.stopPropagation()">Spotify</a>
             </div>
           </div>
+          <div class="work-story"><div><p>First release on PHONO records. Pressure is building. People are watching. What will he deliver? Oh nothing much only a horrible mixdown, a break that he wrote in about 30s which essentially is just him shitting kicks all over the daw and a pathetically 1:20 long second drop to cover up his insecure ass. Got a follow from his favorite monstercat producer tho.</p></div></div>
         </article>
       </div>
     </section>
@@ -553,7 +643,7 @@
       <div class="videos">
         <a class="video-card reveal" href="https://www.youtube.com/watch?v=y1nbNsHS4lo" target="_blank" rel="noopener" aria-label="風 — watch on YouTube">
           <div class="video-frame">
-            <iframe src="https://www.youtube-nocookie.com/embed/y1nbNsHS4lo?autoplay=1&mute=1&loop=1&playlist=y1nbNsHS4lo&rel=0&playsinline=1&controls=0" title="風 — visual w/ XXHYZ" loading="lazy" tabindex="-1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+            <iframe src="https://www.youtube-nocookie.com/embed/y1nbNsHS4lo?autoplay=1&mute=1&loop=1&playlist=y1nbNsHS4lo&rel=0&playsinline=1&controls=0&enablejsapi=1" title="風 — visual w/ XXHYZ" tabindex="-1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
             <img class="video-thumb" src="https://i.ytimg.com/vi/y1nbNsHS4lo/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/y1nbNsHS4lo/hqdefault.jpg'" alt="">
           </div>
           <div class="video-info">
@@ -564,7 +654,7 @@
 
         <a class="video-card reveal" href="https://www.youtube.com/watch?v=kdh3zKvuohE" target="_blank" rel="noopener" aria-label="Take Me — watch on YouTube">
           <div class="video-frame">
-            <iframe src="https://www.youtube-nocookie.com/embed/kdh3zKvuohE?autoplay=1&mute=1&loop=1&playlist=kdh3zKvuohE&rel=0&playsinline=1&controls=0" title="Take Me — visual w/ XXHYZ" loading="lazy" tabindex="-1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+            <iframe src="https://www.youtube-nocookie.com/embed/kdh3zKvuohE?autoplay=1&mute=1&loop=1&playlist=kdh3zKvuohE&rel=0&playsinline=1&controls=0&enablejsapi=1" title="Take Me — visual w/ XXHYZ" tabindex="-1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
             <img class="video-thumb" src="https://i.ytimg.com/vi/kdh3zKvuohE/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/kdh3zKvuohE/hqdefault.jpg'" alt="">
           </div>
           <div class="video-info">
@@ -573,25 +663,39 @@
           </div>
         </a>
       </div>
+
+      <div class="recognition reveal">
+        <div class="recognition-inner">
+          <h2 class="section-title">Recognition — Take Me</h2>
+          <ul class="laurel-list mono">
+            <li><span class="laurel-fest">Montreal International Animation Film Festival</span><span class="laurel-status hl">Honorable Mention · 2025</span></li>
+            <li><span class="laurel-fest">Animatex</span><span class="laurel-status hl">Nominee · 2025</span></li>
+            <li><span class="laurel-fest">New York Short Animation Festival</span><span class="laurel-status hl">Finalist · 2025</span></li>
+            <li><span class="laurel-fest">Berlin Shorts Award</span><span class="laurel-status hl">Semi-Finalist · 2024</span></li>
+            <li><span class="laurel-fest">Anatolia International Film Festival</span><span class="laurel-status">Official Selection · 2025</span></li>
+            <li><span class="laurel-fest">Palm Springs Intl. Animation Festival</span><span class="laurel-status">Official Selection · 2025</span></li>
+            <li><span class="laurel-fest">MONSTRA — Lisbon Animation Festival</span><span class="laurel-status">Official Selection · 2025</span></li>
+            <li><span class="laurel-fest">Athens ANIMFEST</span><span class="laurel-status">Official Selection · 2025</span></li>
+            <li><span class="laurel-fest">LA International Film Festival</span><span class="laurel-status">Official Selection · 2025</span></li>
+          </ul>
+        </div>
+      </div>
     </section>
 
     <!-- ================= ABOUT ================= -->
     <section class="panel" id="about">
       <h2 class="section-title">About</h2>
       <img class="about-header reveal" src="covers/about-header.jpg" alt="DESOLA7ED artwork — figure in the rain">
-      <div class="about-grid">
-        <img class="about-photo reveal" src="covers/profile.jpg" alt="DESOLA7ED">
-        <div class="bio reveal">
-          <p>I started producing around 2019. As a teenage kid, I loved listening to Puppet, Jaron, and Porter Robinson, and found my passion for synths and distortion. I was lucky enough to be discovered by people who appreciated my amateur creations and gave my musical identity meaning. Over the years, my disorganized and procrastinating self grew reliant on a faint hope for moments of revelation, though they did not come nearly as often as the countless frustrating nights of build, delete, and repeat. At some point, I decided it was time to stop and reorient my attention toward friends, loved ones, and other things that give my life meaning. The d7 project, to me, is goals unfulfilled, expectations unmet, and a trauma factory of self-criticism. But I know it is something more, at least to my mentors, my closest friends, and those who have supported me and given me countless reasons to keep going. I therefore do not regret, for a single moment, everything I have done and sacrificed for him. I am, however, sorry for the people I have hurt, disappointed, and lost along the way.</p>
-          <p class="bio-sig mono">--d7</p>
-          <p>I've made some friends along the way, and lost more over the years. Please do not hesitate to reach out and connect. I will find my way back someday.</p>
-        </div>
+      <div class="bio reveal">
+        <p>I started producing around 2019. As a teenage kid, I loved listening to Puppet, Jaron, and Porter Robinson, and found my passion for synths and distortion. I was lucky enough to be discovered by people who appreciated my amateur creations and gave my musical identity meaning. Over the years, my disorganized and procrastinating self grew reliant on a faint hope for moments of revelation, though they did not come nearly as often as the countless frustrating nights of build, delete, and repeat. At some point, I decided it was time to stop and reorient my attention toward friends, loved ones, and other things that give my life meaning. The d7 project, to me, is goals unfulfilled, expectations unmet, and a trauma factory of self-criticism. But I know it is something more, at least to my mentors, my closest friends, and those who have supported me and given me countless reasons to keep going. I therefore do not regret, for a single moment, everything I have done and sacrificed for him. I am, however, sorry for the people I have hurt, disappointed, and lost along the way.</p>
+        <p class="bio-sig mono">-d7</p>
       </div>
     </section>
 
     <!-- ================= CONTACT ================= -->
     <section class="panel" id="contact">
       <h2 class="section-title">Contact</h2>
+      <p class="contact-note reveal">I've made some friends along the way, and lost more over the years. Please do not hesitate to reach out and connect. I will find my way back someday.</p>
       <img class="signature reveal" src="covers/signature.jpg" alt="DESOLA7ED signature">
       <p class="email reveal"><a href="mailto:lanrr.bobby@gmail.com">lanrr.bobby@gmail.com</a></p>
 
@@ -619,12 +723,6 @@
   <footer>
     DESOLA7ED · lanrr.bobby@gmail.com · &copy; 2026 All rights reserved.
   </footer>
-
-  <!-- ================= LIGHTBOX ================= -->
-  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Fullscreen image">
-    <button class="lightbox-close" aria-label="Close">&times;</button>
-    <img src="" alt="Fullscreen cover">
-  </div>
 
   <script>
     /* ---------- Tab navigation (hash-based) ---------- */
@@ -754,27 +852,60 @@
       });
     }
 
-    /* ---------- Lightbox ---------- */
-    const lightbox = document.getElementById("lightbox");
-    const lightboxImg = lightbox.querySelector("img");
-
+    /* ---------- Liner notes: click a cover to reveal its story ---------- */
     document.querySelectorAll(".work").forEach(work => {
-      const open = () => {
-        const img = work.querySelector("img");
-        if (!img) return;
-        lightboxImg.src = work.dataset.full || img.src;
-        lightbox.classList.add("open");
+      const toggle = e => {
+        // don't toggle when a platform link inside the card was clicked
+        if (e.target.closest("a")) return;
+        work.classList.toggle("open");
       };
-      work.addEventListener("click", open);
+      work.addEventListener("click", toggle);
       work.addEventListener("keydown", e => {
-        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); }
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); work.classList.toggle("open"); }
       });
     });
 
-    lightbox.addEventListener("click", () => lightbox.classList.remove("open"));
-    document.addEventListener("keydown", e => {
-      if (e.key === "Escape") lightbox.classList.remove("open");
-    });
+    /* ---------- Intro veil ---------- */
+    const veil = document.getElementById("veil");
+    const dismissVeil = () => {
+      veil.classList.add("hide");
+      setTimeout(() => veil.remove(), 1000);
+    };
+    if (reducedMotion) { veil.remove(); }
+    else { setTimeout(dismissVeil, 1300); }
+
+    /* ---------- Ambient background parallax ---------- */
+    if (fineHover && !reducedMotion) {
+      const bg = document.querySelector(".bg");
+      let bgRaf = null;
+      window.addEventListener("scroll", () => {
+        if (bgRaf) return;
+        bgRaf = requestAnimationFrame(() => {
+          bg.style.transform = `scale(1.08) translateY(${window.scrollY * -0.04}px)`;
+          bgRaf = null;
+        });
+      }, { passive: true });
+    }
+
+    /* ---------- Keep video previews looping forever ---------- */
+    const ytApi = document.createElement("script");
+    ytApi.src = "https://www.youtube.com/iframe_api";
+    document.head.appendChild(ytApi);
+    window.onYouTubeIframeAPIReady = () => {
+      document.querySelectorAll(".video-frame iframe").forEach(frame => {
+        new YT.Player(frame, {
+          events: {
+            onStateChange: e => {
+              // restart the muted preview if YouTube ever ends or pauses it
+              if (e.data === YT.PlayerState.ENDED || e.data === YT.PlayerState.PAUSED) {
+                e.target.mute();
+                e.target.playVideo();
+              }
+            }
+          }
+        });
+      });
+    };
 
     /* ---------- Initial panel ---------- */
     if (location.hash) showPanel(location.hash.replace("#", ""));
