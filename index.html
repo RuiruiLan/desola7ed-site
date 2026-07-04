@@ -265,27 +265,78 @@
 
     /* ---------- Visual projects ---------- */
     .videos {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 72px;
+      max-width: 860px;
+      margin: 0 auto;
     }
 
-    .video-card { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: var(--surface); }
+    .video-card {
+      display: block;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--surface);
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s ease, border-color 0.3s ease;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+    }
 
-    .video-frame { position: relative; aspect-ratio: 16 / 9; }
+    .video-card:hover, .video-card:focus-visible {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55);
+      outline: none;
+    }
+
+    .video-frame { position: relative; aspect-ratio: 16 / 9; background: #14171c; }
     .video-frame iframe {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
       border: 0;
+      pointer-events: none; /* clicks fall through to the card link */
     }
 
-    .video-info { padding: 14px 16px 16px; }
-    .video-title { font-weight: 700; font-size: 1rem; }
-    .video-meta { color: var(--muted); font-size: 0.78rem; margin-top: 2px; }
-    .video-info a { color: var(--accent); font-size: 0.8rem; font-weight: 700; text-decoration: none; }
-    .video-info a:hover, .video-info a:focus-visible { text-decoration: underline; }
+    /* the cover fades in over the playing preview on hover */
+    .video-thumb {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      pointer-events: none;
+    }
+
+    .video-card:hover .video-thumb, .video-card:focus-visible .video-thumb { opacity: 1; }
+
+    /* corner hint so people know the card is a link */
+    .video-frame::after {
+      content: "YouTube ↗";
+      position: absolute;
+      right: 12px; bottom: 10px;
+      font-family: "Space Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text);
+      background: rgba(10, 11, 13, 0.7);
+      border-radius: 6px;
+      padding: 4px 10px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .video-card:hover .video-frame::after, .video-card:focus-visible .video-frame::after { opacity: 1; }
+
+    .video-info { padding: 16px 20px 18px; }
+    .video-title { font-weight: 900; font-size: 1.25rem; }
+    .video-meta { color: var(--muted); font-size: 0.8rem; margin-top: 3px; }
 
     /* ---------- About ---------- */
     .about-header {
@@ -315,6 +366,7 @@
 
     .bio p { color: var(--text); font-size: 1.05rem; margin-bottom: 18px; }
     .bio p:last-child { color: var(--muted); }
+    .bio-sig { color: var(--muted); font-size: 0.9rem; margin-top: -6px; }
 
     /* ---------- Contact ---------- */
     #contact { text-align: center; }
@@ -499,27 +551,27 @@
     <section class="panel" id="visuals">
       <h2 class="section-title">Visual Projects</h2>
       <div class="videos">
-        <div class="video-card reveal">
+        <a class="video-card reveal" href="https://www.youtube.com/watch?v=y1nbNsHS4lo" target="_blank" rel="noopener" aria-label="風 — watch on YouTube">
           <div class="video-frame">
-            <iframe src="https://www.youtube-nocookie.com/embed/y1nbNsHS4lo?autoplay=1&mute=1&loop=1&playlist=y1nbNsHS4lo&rel=0&playsinline=1" title="風 — visual w/ XXHYZ" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe src="https://www.youtube-nocookie.com/embed/y1nbNsHS4lo?autoplay=1&mute=1&loop=1&playlist=y1nbNsHS4lo&rel=0&playsinline=1&controls=0" title="風 — visual w/ XXHYZ" loading="lazy" tabindex="-1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+            <img class="video-thumb" src="https://i.ytimg.com/vi/y1nbNsHS4lo/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/y1nbNsHS4lo/hqdefault.jpg'" alt="">
           </div>
           <div class="video-info">
             <div class="video-title">風</div>
             <div class="video-meta mono">visual collaboration w/ XXHYZ</div>
-            <a href="https://www.youtube.com/watch?v=y1nbNsHS4lo" target="_blank" rel="noopener">Watch on YouTube</a>
           </div>
-        </div>
+        </a>
 
-        <div class="video-card reveal">
+        <a class="video-card reveal" href="https://www.youtube.com/watch?v=kdh3zKvuohE" target="_blank" rel="noopener" aria-label="Take Me — watch on YouTube">
           <div class="video-frame">
-            <iframe src="https://www.youtube-nocookie.com/embed/kdh3zKvuohE?autoplay=1&mute=1&loop=1&playlist=kdh3zKvuohE&rel=0&playsinline=1" title="Take Me — visual w/ XXHYZ" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe src="https://www.youtube-nocookie.com/embed/kdh3zKvuohE?autoplay=1&mute=1&loop=1&playlist=kdh3zKvuohE&rel=0&playsinline=1&controls=0" title="Take Me — visual w/ XXHYZ" loading="lazy" tabindex="-1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+            <img class="video-thumb" src="https://i.ytimg.com/vi/kdh3zKvuohE/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/kdh3zKvuohE/hqdefault.jpg'" alt="">
           </div>
           <div class="video-info">
             <div class="video-title">Take Me</div>
             <div class="video-meta mono">visual collaboration w/ XXHYZ</div>
-            <a href="https://www.youtube.com/watch?v=kdh3zKvuohE" target="_blank" rel="noopener">Watch on YouTube</a>
           </div>
-        </div>
+        </a>
       </div>
     </section>
 
@@ -530,9 +582,9 @@
       <div class="about-grid">
         <img class="about-photo reveal" src="covers/profile.jpg" alt="DESOLA7ED">
         <div class="bio reveal">
-          <p>I started producing around 2020 — a teenage kid who liked listening to Puppet, Jaron, and Porter Robinson. I loved playing around with synths and distortion.</p>
-          <p>I was lucky enough to be discovered by people who appreciated my amateur creations and gave my musical identity meaning. I've made some friends along the way, and lost some over the years as I lost focus and burned out.</p>
-          <p>Please do not hesitate to reach out and connect. I will find my way back someday.</p>
+          <p>I started producing around 2019. As a teenage kid, I loved listening to Puppet, Jaron, and Porter Robinson, and found my passion for synths and distortion. I was lucky enough to be discovered by people who appreciated my amateur creations and gave my musical identity meaning. Over the years, my disorganized and procrastinating self grew reliant on a faint hope for moments of revelation, though they did not come nearly as often as the countless frustrating nights of build, delete, and repeat. At some point, I decided it was time to stop and reorient my attention toward friends, loved ones, and other things that give my life meaning. The d7 project, to me, is goals unfulfilled, expectations unmet, and a trauma factory of self-criticism. But I know it is something more, at least to my mentors, my closest friends, and those who have supported me and given me countless reasons to keep going. I therefore do not regret, for a single moment, everything I have done and sacrificed for him. I am, however, sorry for the people I have hurt, disappointed, and lost along the way.</p>
+          <p class="bio-sig mono">--d7</p>
+          <p>I've made some friends along the way, and lost more over the years. Please do not hesitate to reach out and connect. I will find my way back someday.</p>
         </div>
       </div>
     </section>
@@ -584,11 +636,12 @@
       panels.forEach(p => p.classList.toggle("active", p.id === target));
       tabLinks.forEach(l => l.classList.toggle("active", l.dataset.panel === target));
       window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
+      syncScroll();
       requestAnimationFrame(observeReveals);
     }
 
     window.addEventListener("hashchange", () => showPanel(location.hash.replace("#", "")));
-    if (location.hash) showPanel(location.hash.replace("#", ""));
+    // initial panel is selected at the end of this script, after all helpers exist
 
     /* ---------- Scroll reveal ---------- */
     const io = new IntersectionObserver(entries => {
@@ -600,10 +653,46 @@
     }
     observeReveals();
 
-    /* ---------- Magnetic pull + RGB channel split on covers ---------- */
+    /* ---------- Inertia smooth scrolling (desktop) ---------- */
     const fineHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+    let syncScroll = () => {};
+    if (fineHover && !reducedMotion) {
+      let target = window.scrollY;
+      let current = window.scrollY;
+      let raf = null;
+
+      const maxScroll = () => document.documentElement.scrollHeight - window.innerHeight;
+      const clamp = v => Math.max(0, Math.min(v, maxScroll()));
+
+      syncScroll = () => { target = current = window.scrollY; };
+
+      window.addEventListener("wheel", e => {
+        if (e.ctrlKey) return; // don't hijack pinch-zoom
+        e.preventDefault();
+        const delta = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaY;
+        target = clamp(target + delta);
+        if (!raf) raf = requestAnimationFrame(loop);
+      }, { passive: false });
+
+      function loop() {
+        current += (target - current) * 0.1; // easing factor: lower = floatier
+        if (Math.abs(target - current) < 0.5) {
+          current = target;
+          window.scrollTo(0, current);
+          raf = null;
+          return;
+        }
+        window.scrollTo(0, current);
+        raf = requestAnimationFrame(loop);
+      }
+
+      // stay in sync when scrolling happens by other means (keys, scrollbar drag)
+      window.addEventListener("scroll", () => { if (!raf) syncScroll(); });
+    }
+
+    /* ---------- Magnetic pull + RGB glitch flash on covers ---------- */
     if (fineHover && !reducedMotion) {
       document.querySelectorAll(".cover-wrap").forEach(wrap => {
         const base = wrap.querySelector("img");
@@ -620,7 +709,8 @@
         wrap.append(ghostR, ghostC);
 
         const pull = 10;   // how far the cover drifts toward the cursor (px)
-        const split = 14;  // max channel separation (px)
+        const split = 16;  // channel separation during the entry flash (px)
+        let flashTimer = null;
 
         const move = e => {
           const r = wrap.getBoundingClientRect();
@@ -628,20 +718,37 @@
           const dy = (e.clientY - r.top) / r.height - 0.5;
           wrap.style.transition = "box-shadow 0.5s ease";
           wrap.style.transform = `translate(${dx * pull}px, ${dy * pull}px) scale(1.02)`;
-          ghostR.style.transform = `translate(${dx * split}px, ${dy * split}px)`;
-          ghostC.style.transform = `translate(${-dx * split}px, ${-dy * split}px)`;
-          ghostR.style.opacity = ghostC.style.opacity = 0.55;
           wrap.style.setProperty("--mx", `${(dx + 0.5) * 100}%`);
           wrap.style.setProperty("--my", `${(dy + 0.5) * 100}%`);
+        };
+
+        // brief glitch flash when the cursor enters, then the art snaps crisp
+        const enter = e => {
+          const r = wrap.getBoundingClientRect();
+          const dx = (e.clientX - r.left) / r.width - 0.5;
+          const dy = (e.clientY - r.top) / r.height - 0.5;
+          ghostR.style.transition = "none";
+          ghostC.style.transition = "none";
+          ghostR.style.transform = `translate(${dx * split}px, ${dy * split}px)`;
+          ghostC.style.transform = `translate(${-dx * split}px, ${-dy * split}px)`;
+          ghostR.style.opacity = ghostC.style.opacity = 0.6;
+          clearTimeout(flashTimer);
+          flashTimer = setTimeout(() => {
+            ghostR.style.transition = ghostC.style.transition = "opacity 0.28s ease, transform 0.28s ease";
+            ghostR.style.transform = ghostC.style.transform = "translate(0, 0)";
+            ghostR.style.opacity = ghostC.style.opacity = 0;
+          }, 90);
         };
 
         const leave = () => {
           wrap.style.transition = "transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.5s ease";
           wrap.style.transform = "translate(0, 0) scale(1)";
+          clearTimeout(flashTimer);
           ghostR.style.transform = ghostC.style.transform = "translate(0, 0)";
           ghostR.style.opacity = ghostC.style.opacity = 0;
         };
 
+        wrap.parentElement.addEventListener("mouseenter", enter);
         wrap.parentElement.addEventListener("mousemove", move);
         wrap.parentElement.addEventListener("mouseleave", leave);
       });
@@ -668,6 +775,9 @@
     document.addEventListener("keydown", e => {
       if (e.key === "Escape") lightbox.classList.remove("open");
     });
+
+    /* ---------- Initial panel ---------- */
+    if (location.hash) showPanel(location.hash.replace("#", ""));
   </script>
 </body>
 </html>
